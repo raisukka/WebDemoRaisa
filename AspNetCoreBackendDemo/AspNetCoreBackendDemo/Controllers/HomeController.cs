@@ -22,22 +22,43 @@ namespace AspNetCoreBackendDemo.Controllers
             return View();
         }
 
-        public IActionResult Contact()
-        {
-            ViewData["Message"] = "Your contact page.";
+   
 
-            return View();
-        }
-
-        public IActionResult Privacy()
-        {
-            return View();
-        }
+     
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+
+        public IActionResult OmaJuttu()
+        {
+            return View();
+        }
+
+
+
+        public IActionResult Asiakkaat(string id)
+        {
+            NorthwindContext context = new NorthwindContext();
+
+
+            if (id == null)
+            {
+                return View(context.Customers);
+            }
+            else
+            {
+                string maa = id;
+                List<Customers> asiakkaat = (from c in context.Customers
+                                             where c.Country == maa
+                                             orderby c.CompanyName
+                                             select c).ToList();
+
+                //          return View(context.Customers);
+                return View(asiakkaat);
+            }
+        } 
     }
 }
